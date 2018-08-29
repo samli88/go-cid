@@ -358,20 +358,20 @@ func (c *Cid) Bytes() []byte {
 }
 
 func (c *Cid) bytesV0() []byte {
-	return []byte(c.hash)
+	return c.hash.Bytes()
 }
 
 func (c *Cid) bytesV1() []byte {
 	// two 8 bytes (max) numbers plus hash
-	buf := make([]byte, 2*binary.MaxVarintLen64+len(c.hash))
+	buf := make([]byte, 2*binary.MaxVarintLen64+len(c.hash.Binary()))
 	n := binary.PutUvarint(buf, c.version)
 	n += binary.PutUvarint(buf[n:], c.codec)
-	cn := copy(buf[n:], c.hash)
-	if cn != len(c.hash) {
+	cn := copy(buf[n:], c.hash.Binary())
+	if cn != len(c.hash.Binary()) {
 		panic("copy hash length is inconsistent")
 	}
 
-	return buf[:n+len(c.hash)]
+	return buf[:n+len(c.hash.Binary())]
 }
 
 // Equals checks that two Cids are the same.
@@ -380,7 +380,7 @@ func (c *Cid) bytesV1() []byte {
 func (c *Cid) Equals(o *Cid) bool {
 	return c.codec == o.codec &&
 		c.version == o.version &&
-		bytes.Equal(c.hash, o.hash)
+		c.hash == o.hash
 }
 
 // UnmarshalJSON parses the JSON representation of a Cid.
@@ -436,7 +436,7 @@ func (c *Cid) Loggable() map[string]interface{} {
 
 // Prefix builds and returns a Prefix out of a Cid.
 func (c *Cid) Prefix() Prefix {
-	dec, _ := mh.Decode(c.hash) // assuming we got a valid multiaddr, this will not error
+	dec, _ := mh.Decode(c.hash.Bytes()) // assuming we got a valid multiaddr, this will not error
 	return Prefix{
 		MhType:   dec.Code,
 		MhLength: dec.Length,
