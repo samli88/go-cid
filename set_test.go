@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	mh "github.com/multiformats/go-multihash"
+	mh "github.com/samli88/go-multihash"
 )
 
 func makeRandomCid(t *testing.T) Cid {

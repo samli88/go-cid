@@ -1,7 +1,7 @@
 package cid
 
 import (
-	mh "github.com/multiformats/go-multihash"
+	mh "github.com/samli88/go-multihash"
 )
 
 // NewPrefixV0 returns a CIDv0 prefix with the specified multihash type.

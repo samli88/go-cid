@@ -28,7 +28,7 @@ import (
 	"strings"
 
 	mbase "github.com/multiformats/go-multibase"
-	mh "github.com/multiformats/go-multihash"
+	mh "github.com/samli88/go-multihash"
 )
 
 // UnsupportedVersionString just holds an error message
